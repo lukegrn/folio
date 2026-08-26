@@ -1,0 +1,22 @@
+{
+  "name": "lukegrn/folio",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Luke Green",
+      "email": "me@lukegreen.xyz"
+    }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "^13"
+  },
+  "scripts": {
+    "test-all": "./vendor/bin/phpunit tests --display-deprecations --display-warnings"
+  }
+}
