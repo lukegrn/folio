@@ -1,6 +1,7 @@
 {
   "name": "lukegrn/folio",
   "type": "project",
+  "description": "To host photography portfolio",
   "license": "MIT",
   "autoload": {
     "psr-4": {
