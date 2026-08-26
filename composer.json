@@ -18,6 +18,6 @@
     "phpunit/phpunit": "^13"
   },
   "scripts": {
-    "test-all": "./vendor/bin/phpunit tests --display-deprecations --display-warnings"
+    "test-all": "./vendor/bin/phpunit tests --display-deprecations --display-warnings --testdox"
   }
 }

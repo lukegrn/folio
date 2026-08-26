@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Framework\Router;
 
-use App\Framework\Router\Exceptions\DuplicateWildcardException;
 use App\Framework\Router\Exceptions\DuplicateWildcareException;
 use App\Framework\Router\Exceptions\RouteAlreadyRegisteredException;
 use App\Framework\Router\Exceptions\UnmatchedCurlyBraceException;
-
-use function pcov\waiting;
 
 class Router
 {
