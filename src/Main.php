@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App;
 
 use App\Framework\Router\Router;
+use App\Handlers\HelloHandler;
+use App\Handlers\HelloJsonHandler;
 
 class Main
 {
@@ -12,13 +14,9 @@ class Main
     {
         $router = new Router();
 
-        $router->GET("/", function () {
-            echo 'Hello, homepage!';
-        });
-
-        $router->GET("/{name}", function ($args) {
-            echo 'Hello, ' . $args['name'] . '!';
-        });
+        $router->GET("/", new HelloHandler());
+        $router->GET("/hello/{name}", new HelloHandler());
+        $router->GET("/json", new HelloJsonHandler());
 
         $router->run();
     }
