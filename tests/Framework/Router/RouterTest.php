@@ -2,11 +2,24 @@
 
 declare(strict_types=1);
 
+use App\Framework\Handler\Handler;
 use App\Framework\Router\Exceptions\DuplicateWildcareException;
 use App\Framework\Router\Exceptions\RouteAlreadyRegisteredException;
 use App\Framework\Router\Router;
 use App\Framework\Router\Exceptions\UnmatchedCurlyBraceException;
 use PHPUnit\Framework\TestCase;
+
+class HelloHandler extends Handler
+{
+    protected function handle(array $args): void
+    {
+        if (array_key_exists('name', $args)) {
+            echo 'hello, ' . $args['name'];
+        } else {
+            echo 'hello';
+        }
+    }
+}
 
 final class RouterTest extends TestCase
 {
@@ -16,21 +29,17 @@ final class RouterTest extends TestCase
         $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
-        $f = function () {
-            echo 'ran';
-        };
-
-        $router->GET('/', $f);
-        $this->expectOutputString('ran');
+        $router->GET('/', HelloHandler::class);
+        $this->expectOutputString('hello');
         $router->run();
     }
 
     public function testReregisteringRouteThrowsException(): void
     {
         $router = new Router();
-        $router->GET('/', fn () => 'first');
+        $router->GET('/', HelloHandler::class);
         $this->expectException(RouteAlreadyRegisteredException::class);
-        $router->GET('/', fn () => 'second');
+        $router->GET('/', HelloHandler::class);
     }
 
     public function testUsesDefaultHandlerWhenRouteNotRegistered(): void
@@ -38,65 +47,95 @@ final class RouterTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'GET';
 
         $router = new Router();
-        $this->expectOutputString('not found');
+        $this->expectOutputString('Not found');
         $router->run();
     }
 
     public function testCanRegisterOneRouteWithMultipleMethods(): void
     {
         $router = new Router();
-        $router->GET('/', fn () => 'first');
-        $router->POST('/', fn () => 'second');
+        $router->GET('/', HelloHandler::class);
+        $router->POST('/', HelloHandler::class);
 
         $this->expectNotToPerformAssertions();
     }
 
-    public function testSupportsAllVerbs(): void
+    public function testSupportsGet(): void
     {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/';
         $router = new Router();
-        $called = "";
-        foreach (['GET', 'POST', 'PATCH', 'HEAD', 'DELETE', 'PUT'] as $verb) {
-            $router->$verb('/', function () use ($verb, &$called) {
-                $called = $verb;
-            });
-        }
+        $router->GET("/", HelloHandler::class);
+
+        $this->expectOutputString('hello');
+        $router->run();
+    }
+
+    public function testSupportsHead(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'HEAD';
+        $_SERVER['REQUEST_URI'] = '/';
+        $router = new Router();
+        $router->HEAD("/", HelloHandler::class);
+
+        $this->expectOutputString('hello');
+        $router->run();
+    }
+
+    public function testSupportsPut(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
+        $_SERVER['REQUEST_URI'] = '/';
+        $router = new Router();
+        $router->PUT("/", HelloHandler::class);
+
+        $this->expectOutputString('hello');
+        $router->run();
+    }
+
+    public function testSupportsPost(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['REQUEST_URI'] = '/';
+        $router = new Router();
+        $router->POST("/", HelloHandler::class);
+
+        $this->expectOutputString('hello');
+        $router->run();
+    }
 
 
-        foreach (['GET', 'POST', 'PATCH', 'HEAD', 'DELETE', 'PUT'] as $verb) {
-            $_SERVER['REQUEST_METHOD'] = $verb;
-            $_SERVER['REQUEST_URI'] = '/';
+    public function testSupportsPatch(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'PATCH';
+        $_SERVER['REQUEST_URI'] = '/';
+        $router = new Router();
+        $router->PATCH("/", HelloHandler::class);
 
-            $router->run();
+        $this->expectOutputString('hello');
+        $router->run();
+    }
 
-            $this->assertEquals($called, $verb);
-        }
+    public function testSupportsDelete(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'DELETE';
+        $_SERVER['REQUEST_URI'] = '/';
+        $router = new Router();
+        $router->DELETE("/", HelloHandler::class);
+
+        $this->expectOutputString('hello');
+        $router->run();
     }
 
     public function testCanMatchWildcards(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/options/testoption';
+        $_SERVER['REQUEST_URI'] = '/hello/test';
 
         $router = new Router();
-        $router->GET('/options/{option}', function () {
-            echo 'called';
-        });
+        $router->GET('/hello/{name}', HelloHandler::class);
 
-        $this->expectOutputString('called');
-        $router->run();
-    }
-
-    public function testHandlersAreCalledWithWildcards(): void
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/options/testoption';
-
-        $router = new Router();
-        $router->GET('/options/{option}', function ($args) {
-            echo $args['option'];
-        });
-
-        $this->expectOutputString('testoption');
+        $this->expectOutputString('hello, test');
         $router->run();
     }
 
@@ -104,13 +143,9 @@ final class RouterTest extends TestCase
     {
         $router = new Router();
         $this->expectException(UnmatchedCurlyBraceException::class);
-        $router->GET('/options/{option', function ($args) {
-            echo $args['option'];
-        });
+        $router->GET('/options/{option', HelloHandler::class);
 
         $this->expectException(DuplicateWildcareException::class);
-        $router->GET('/options/{option}/{option}', function ($args) {
-            echo $args['option'];
-        });
+        $router->GET('/options/{option}/{option}', HelloHandler::class);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Framework\Router;
 
+use App\Framework\Handler\Handler;
+use App\Framework\Router\Builtins\BuiltinNotFoundHandler;
 use App\Framework\Router\Exceptions\DuplicateWildcareException;
 use App\Framework\Router\Exceptions\RouteAlreadyRegisteredException;
 use App\Framework\Router\Exceptions\UnmatchedCurlyBraceException;
@@ -14,9 +16,9 @@ class Router
     private string $DEFAULT_HANDLER_KEY = "__default_handler";
 
     /**
-     * @param ?callable() $default_handler
+     * @param ?class-string<Handler> $handler
      */
-    public function __construct(?callable $default_handler = null)
+    public function __construct(?string $default_handler = null)
     {
         $this->routes = [
             'GET' => [],
@@ -29,19 +31,19 @@ class Router
         ];
 
         if ($default_handler == null) {
-            $this->routes[$this->DEFAULT_HANDLER_KEY] = function () {
-                echo 'not found';
-            };
+            $this->routes[$this->DEFAULT_HANDLER_KEY] = new Route(BuiltinNotFoundHandler::class);
         } else {
-            $this->routes[$this->DEFAULT_HANDLER_KEY] = $default_handler;
+            $this->routes[$this->DEFAULT_HANDLER_KEY] = new Route($default_handler);
         }
     }
 
     /**
+     * @param string $verb
      * @param string $route
-     * @param callable() $handler
+     * @param ?class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    private function register(string $verb, string $route, callable $handler): void
+    private function register(string $verb, string $route, string $handler, array $middlewares): void
     {
         if (array_key_exists($route, $this->routes[$verb])) {
             throw new RouteAlreadyRegisteredException("Route $verb $route already registered");
@@ -81,7 +83,7 @@ class Router
         }
 
 
-        $this->routes[$verb][$route] = $handler;
+        $this->routes[$verb][$route] = new Route($handler, $middlewares);
     }
 
 
@@ -139,7 +141,13 @@ class Router
             }
         }, null);
 
-        return $match;
+        if ($match != null) {
+            return $match;
+        }
+
+        return function () {
+            $this->routes[$this->DEFAULT_HANDLER_KEY]([]);
+        };
     }
 
     public function run(): void
@@ -147,10 +155,7 @@ class Router
         $verb = $_SERVER['REQUEST_METHOD'];
         $uri = $_SERVER['REQUEST_URI'];
 
-        $handler = $this->findAndPrepareMatch($verb, $uri) ??
-            $this->routes[$this->DEFAULT_HANDLER_KEY];
-
-        $handler();
+        $this->findAndPrepareMatch($verb, $uri)();
     }
 
     /**
@@ -159,55 +164,61 @@ class Router
 
     /**
      * @param string $route
-     * @param callable() $handler
+     * @param class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    public function GET(string $route, callable $handler): void
+    public function GET(string $route, string $handler, array $middlewares = []): void
     {
-        $this->register('GET', $route, $handler);
+        $this->register('GET', $route, $handler, $middlewares);
     }
 
     /**
      * @param string $route
-     * @param callable() $handler
+     * @param class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    public function HEAD(string $route, callable $handler): void
+    public function HEAD(string $route, string $handler, array $middlewares = []): void
     {
-        $this->register('HEAD', $route, $handler);
+        $this->register('HEAD', $route, $handler, $middlewares);
     }
 
     /**
      * @param string $route
-     * @param callable() $handler
+     * @param class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    public function POST(string $route, callable $handler): void
+    public function POST(string $route, string $handler, array $middlewares = []): void
     {
-        $this->register('POST', $route, $handler);
+        $this->register('POST', $route, $handler, $middlewares);
     }
 
     /**
      * @param string $route
-     * @param callable() $handler
+     * @param class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    public function PUT(string $route, callable $handler): void
+    public function PUT(string $route, string $handler, array $middlewares = []): void
     {
-        $this->register('PUT', $route, $handler);
+        $this->register('PUT', $route, $handler, $middlewares);
     }
 
     /**
      * @param string $route
-     * @param callable() $handler
+     * @param class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    public function DELETE(string $route, callable $handler): void
+    public function DELETE(string $route, string $handler, array $middlewares = []): void
     {
-        $this->register('DELETE', $route, $handler);
+        $this->register('DELETE', $route, $handler, $middlewares);
     }
 
     /**
      * @param string $route
-     * @param callable() $handler
+     * @param class-string<Handler> $handler
+     * @param array<class-string<Middleware>> $middlewares
      */
-    public function PATCH(string $route, callable $handler): void
+    public function PATCH(string $route, string $handler, array $middlewares = []): void
     {
-        $this->register('PATCH', $route, $handler);
+        $this->register('PATCH', $route, $handler, $middlewares);
     }
 }
