@@ -22,7 +22,7 @@ final class LogRequestTest extends TestCase
         $l = new LogRequest(new LogRequestTestHandler());
         $l->setOutput('php://output');
 
-        $this->expectOutputRegex('/^\{"path":"","verb":"GET","duration":\d+,"response":\{"status":false\}\}$/');
+        $this->expectOutputRegex('/^\{"path":"","verb":"GET","duration":\d+,"response":\{"status":false\},"time":"\d{4}-[01]{1}\d{1}-[0123]{1}\d{1} [012]{1}\d{1}:[0-6]{1}\d{1}:[0-6]{1}\d{1} UTC"\}$/');
         $l([]);
     }
 }
