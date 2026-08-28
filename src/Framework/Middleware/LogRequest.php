@@ -25,6 +25,7 @@ class LogRequest extends Middleware
         $payload['response'] = [
             'status' => http_response_code()
         ];
+        $payload['time'] = date('Y-m-d H:i:s e');
 
         file_put_contents($this->output, json_encode($payload));
     }
