@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<files version="1">
+ <file path="src/Framework/Config/Config.php">
+  <line number="28" hash="9e9bdf648428bc00e223a73c45f0a712b7fbb518">
+   <issue><![CDATA[syntax error, unexpected '=' in /tmp/malformed.ini on line 1
+]]></issue>
+  </line>
+ </file>
+</files>
