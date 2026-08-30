@@ -8,7 +8,7 @@ use App\Framework\Handler\Handler;
 
 class LogRequest extends Middleware
 {
-    protected string $output;
+    protected static $output;
 
     protected function handle(array $args): void
     {
@@ -27,12 +27,12 @@ class LogRequest extends Middleware
         ];
         $payload['time'] = date('Y-m-d H:i:s e');
 
-        file_put_contents($this->output, json_encode($payload));
+        file_put_contents(static::$output, json_encode($payload) . "\n", FILE_APPEND);
     }
 
-    public function setOutput(string $output): void
+    public static function setOutput(string $output): void
     {
-        $this->output = $output;
+        static::$output = $output;
     }
 
     public function __construct(Handler $next)
@@ -40,6 +40,8 @@ class LogRequest extends Middleware
         parent::__construct($next);
 
         // Set default output
-        $this->output = 'php://stdout';
+        if (!isset(static::$output)) {
+            static::$output = 'php://stdout';
+        }
     }
 }
