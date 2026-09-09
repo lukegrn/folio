@@ -13,6 +13,21 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: folio        
+          POSTGRES_PASSWORD: folio
+          POSTGRES_USER: folio
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
@@ -22,6 +37,15 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
+
+    - name: Initialize testing config
+      run: |
+        echo "env = dev" > conf.ini
+        echo "dbName = folio" >> conf.ini 
+        echo "dbUser = folio" >> conf.ini
+        echo "dbPass = folio" >> conf.ini
+        echo "dbHost = localhost" >> conf.ini
+        echo "dbPort = 5432" >> conf.ini
 
     - name: Cache Composer packages
       id: composer-cache
@@ -36,4 +60,5 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Unit Test
-      run: composer test-all
+      run: | 
+        composer test-all
