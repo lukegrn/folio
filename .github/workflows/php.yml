@@ -61,5 +61,4 @@ jobs:
 
     - name: Unit Test
       run: | 
-        cat conf.ini
         composer test-all
