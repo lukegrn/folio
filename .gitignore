@@ -1,3 +1,5 @@
 /vendor/
 
 conf.ini
+
+phinx.php

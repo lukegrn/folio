@@ -19,5 +19,8 @@
   },
   "scripts": {
     "test-all": "./vendor/bin/phpunit tests --display-deprecations --display-warnings --testdox --use-baseline baseline.xml"
+  },
+  "require": {
+    "robmorgan/phinx": "^0.16.12"
   }
 }
