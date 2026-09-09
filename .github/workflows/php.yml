@@ -40,6 +40,7 @@ jobs:
 
     - name: Initialize testing config
       run: |
+        pwd
         echo "env = dev\ndbName = folio\ndbUser=folio\ndbPass=folio\ndbHost=localhost\ndbPort=5432\n" > ./conf.ini
 
     - name: Cache Composer packages
