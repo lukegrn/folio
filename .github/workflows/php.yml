@@ -40,8 +40,7 @@ jobs:
 
     - name: Initialize testing config
       run: |
-        pwd
-        echo "env = dev\ndbName = folio\ndbUser=folio\ndbPass=folio\ndbHost=localhost\ndbPort=5432\n" > ./conf.ini
+        echo "env = dev\ndbName = folio\ndbUser=folio\ndbPass=folio\ndbHost=localhost\ndbPort=5432\n" > conf.ini
 
     - name: Cache Composer packages
       id: composer-cache
@@ -56,4 +55,7 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Unit Test
-      run: composer test-all
+      run: | 
+        ls
+        cat conf.ini
+        composer test-all
