@@ -1,9 +1,15 @@
-# Folio
+# folio-ts
 
-Basic portfolio application to allow for easy management of my photography
+To install dependencies:
 
-## Deps
+```bash
+bun install
+```
 
-- [phpunit](https://phpunit.de/getting-started.html)
-- [phinx](https://phinx.org/)
-- pdo psql
+To run:
+
+```bash
+bun run index.ts
+```
+
+This project was created using `bun init` in bun v1.4.2. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
