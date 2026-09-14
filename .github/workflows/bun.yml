@@ -27,4 +27,6 @@ jobs:
 
       # Step 4: Execute the test runner
       - name: Run Tests
-        run: bun test
+        run: |
+          ls
+          bun test
