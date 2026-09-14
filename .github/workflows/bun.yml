@@ -27,4 +27,4 @@ jobs:
 
       # Step 4: Execute the test runner
       - name: Run Tests
-        run: bun test --preload ./setupTests.ts
+        run: bun test
