@@ -1,0 +1,9 @@
+[test]
+root = "src"
+coverage = true
+coverageSkipTestFiles = true
+coverageThreshold = 0.8
+coveragePathIgnorePatterns = [
+	"appconf.ts",
+]
+preload = ['./setupTests.ts']

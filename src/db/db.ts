@@ -1,6 +1,6 @@
 import postgres from "postgres";
-import config from "../../appconf.json" with { type: "json" };
+import { getConfig } from "../config/config";
 
 export const sql = postgres({
-  ...config.db,
+  ...getConfig().database,
 });
