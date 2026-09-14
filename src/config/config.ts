@@ -44,15 +44,6 @@ export const registerConfig = () => {
     !dbPass ||
     !logMinLevel
   ) {
-    console.error(
-      dbHost,
-      dbPort,
-      dbPass,
-      dbDatabase,
-      dbUser,
-      dbPass,
-      logMinLevel,
-    );
     throw new Error("Malformed config");
   }
 
