@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "express": "^5.2.1",
-    "postgres": "^3.4.9"
+    "postgres": "^3.4.9",
+    "tslog": "^5.2.0"
   }
 }
