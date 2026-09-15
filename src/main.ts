@@ -3,11 +3,13 @@ import { sql } from "./db/db";
 import { logRequest } from "./middlewares/logRequest";
 import { log } from "./logger";
 import { errorHandler } from "./middlewares/errorHandler";
+import { injectRequestID } from "./middlewares/injectRequestID";
 
 export const main = () => {
   const app = express();
   const port = 8080;
 
+  app.use(injectRequestID);
   app.use(logRequest);
 
   app.get("/", (_req: Request, res: Response) => {
