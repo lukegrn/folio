@@ -14,6 +14,7 @@ export const logRequest = (req: Request, res: Response, next: NextFunction) => {
       status: 0,
       duration: 0,
     },
+    id: res?.locals?.id,
   };
 
   res.on("finish", () => {

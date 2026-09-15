@@ -11,4 +11,5 @@ interface LogResponse {
 export interface LogBody {
   request: LogRequest;
   response: LogResponse;
+  id: string;
 }

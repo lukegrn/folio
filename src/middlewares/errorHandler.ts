@@ -7,7 +7,7 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
-  log.error(err.message);
+  log.error({ message: err.message, id: res?.locals?.id });
 
   res.status(500).json({
     message: "Internal Server Error",

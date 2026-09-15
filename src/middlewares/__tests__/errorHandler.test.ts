@@ -21,6 +21,7 @@ const mockInputs = () => ({
   } as Request,
   res: {
     status,
+    locals: {},
   } as unknown as Response,
   err: new Error("test message"),
   nextFn: () => ({}) as NextFunction,
@@ -37,7 +38,7 @@ test("logs an error", () => {
   errorHandler(err, req, res, nextFn);
 
   expect(logError.mock.calls.length).toBe(1);
-  expect(logError.mock.calls?.[0]?.[0]).toBe("test message");
+  expect(logError.mock.calls?.[0]?.[0].message).toBe("test message");
 });
 
 test("responds with 500", () => {
@@ -46,6 +47,16 @@ test("responds with 500", () => {
 
   expect(status.mock.calls.length).toBe(1);
   expect(status.mock.calls?.[0]?.[0]).toBe(500);
+});
+
+test("logs the request id when set", () => {
+  const { err, req, res, nextFn } = mockInputs();
+
+  res.locals.id = "id";
+  errorHandler(err, req, res, nextFn);
+
+  expect(logError.mock.calls.length).toBe(1);
+  expect(logError.mock.calls?.[0]?.[0].id).toBe("id");
 });
 
 test("responds with prod json", () => {
