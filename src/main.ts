@@ -32,11 +32,11 @@ export const main = () => {
 
   // Explicit frontend routes
   app.get("/", (_req: Request, res: Response) => {
-    res.sendFile(__dirname + "/views/home.html");
+    res.sendFile(`${__dirname}/views/home.html`);
   });
 
   app.get("/js/htmx.min.js", (_req: Request, res: Response) => {
-    res.sendFile(__dirname + "/views/htmx.min.js");
+    res.sendFile(`${__dirname}/views/htmx.min.js`);
   });
 
   // Error handler must be last
