@@ -1,4 +1,3 @@
-import { application } from "express";
 import { LogLevel } from "tslog";
 
 interface DatabaseConfig {
@@ -30,49 +29,46 @@ export const resetConfig = () => {
   config = undefined;
 };
 
-const num = (v: string | undefined) => (v ? parseInt(v) : undefined);
+const req = (envVal: string) => {
+  const v = process.env[envVal];
+  if (v) {
+    return v;
+  }
+
+  throw new Error(`Required value ${envVal} not found`);
+};
+
+const num = (v: string) => {
+  const i = parseInt(v);
+  if (isNaN(i)) {
+    throw new Error(`Unable to parse string ${v} as int`);
+  }
+
+  return i;
+};
+
+const enumOf = <T extends Record<string, string | number>>(v: string, e: T) => {
+  if (!(v in e)) {
+    throw new Error(`String value ${v} is not a member of enum`);
+  }
+
+  return e[v as keyof typeof e];
+};
 
 export const registerConfig = () => {
-  const dbHost = process.env.DB_HOST;
-  const dbPort = num(process.env.DB_PORT);
-  const dbDatabase = process.env.DB_DATABASE;
-  const dbUser = process.env.DB_USER;
-  const dbPass = process.env.DB_PASS;
-
-  const logMinLevel = process.env.LOG_MIN_LEVEL;
-
-  const applicationPort = num(process.env.APPLICATION_PORT);
-
-  if (
-    !dbHost ||
-    !dbPort ||
-    Number.isNaN(dbPort) ||
-    !dbDatabase ||
-    !dbUser ||
-    !dbPass ||
-    !logMinLevel ||
-    !applicationPort
-  ) {
-    throw new Error("Malformed config");
-  }
-
-  if (!(logMinLevel in LogLevel)) {
-    throw new Error("Malformed config");
-  }
-
   config = {
     database: {
-      host: dbHost,
-      port: dbPort,
-      database: dbDatabase,
-      username: dbUser,
-      password: dbPass,
+      host: req("DB_HOST"),
+      port: num(req("DB_PORT")),
+      database: req("DB_DATABASE"),
+      username: req("DB_USER"),
+      password: req("DB_PASS"),
     },
     log: {
-      minLevel: LogLevel[logMinLevel as keyof typeof LogLevel],
+      minLevel: enumOf(req("LOG_MIN_LEVEL"), LogLevel),
     },
     application: {
-      port: applicationPort,
+      port: num(req("APPLICATION_PORT")),
     },
   };
 };
