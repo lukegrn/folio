@@ -4,10 +4,10 @@ import { logRequest } from "./middlewares/logRequest";
 import { log } from "./logger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { injectRequestID } from "./middlewares/injectRequestID";
+import { getConfig } from "./config/config";
 
 export const main = () => {
   const app = express();
-  const port = 8080;
 
   app.use(injectRequestID);
   app.use(logRequest);
@@ -37,7 +37,7 @@ export const main = () => {
   // Error handler must be last
   app.use(errorHandler);
 
-  app.listen(port, () => {
-    log.info(`Folio listening on port: ${port}`);
+  app.listen(getConfig().application.port, () => {
+    log.info(`Folio listening on port: ${getConfig().application.port}`);
   });
 };

@@ -1,3 +1,4 @@
+import { application } from "express";
 import { LogLevel } from "tslog";
 
 interface DatabaseConfig {
@@ -12,9 +13,14 @@ interface LogConfig {
   minLevel: LogLevel;
 }
 
+interface ApplicationConfig {
+  port: number;
+}
+
 interface Config {
   database: DatabaseConfig;
   log: LogConfig;
+  application: ApplicationConfig;
 }
 
 let config: Config | undefined;
@@ -24,16 +30,18 @@ export const resetConfig = () => {
   config = undefined;
 };
 
+const num = (v: string | undefined) => (v ? parseInt(v) : undefined);
+
 export const registerConfig = () => {
   const dbHost = process.env.DB_HOST;
-  const dbPort = process.env.DB_PORT
-    ? parseInt(process.env.DB_PORT)
-    : undefined;
+  const dbPort = num(process.env.DB_PORT);
   const dbDatabase = process.env.DB_DATABASE;
   const dbUser = process.env.DB_USER;
   const dbPass = process.env.DB_PASS;
 
   const logMinLevel = process.env.LOG_MIN_LEVEL;
+
+  const applicationPort = num(process.env.APPLICATION_PORT);
 
   if (
     !dbHost ||
@@ -42,7 +50,8 @@ export const registerConfig = () => {
     !dbDatabase ||
     !dbUser ||
     !dbPass ||
-    !logMinLevel
+    !logMinLevel ||
+    !applicationPort
   ) {
     throw new Error("Malformed config");
   }
@@ -61,6 +70,9 @@ export const registerConfig = () => {
     },
     log: {
       minLevel: LogLevel[logMinLevel as keyof typeof LogLevel],
+    },
+    application: {
+      port: applicationPort,
     },
   };
 };
