@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "folio-ts",
+      "name": "folio",
       "dependencies": {
         "express": "^5.2.1",
         "postgres": "^3.4.9",
