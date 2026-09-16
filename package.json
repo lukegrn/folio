@@ -4,9 +4,12 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "bun run index.ts"
+    "start": "bun run index.ts",
+    "lint": "biome lint",
+    "lint:fix": "biome lint --write"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.14",
     "@types/bun": "latest",
     "@types/express": "^5.0.6"
   },

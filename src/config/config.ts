@@ -39,8 +39,8 @@ const req = (envVal: string) => {
 };
 
 const num = (v: string) => {
-  const i = parseInt(v);
-  if (isNaN(i)) {
+  const i = parseInt(v, 10);
+  if (Number.isNaN(i)) {
     throw new Error(`Unable to parse string ${v} as int`);
   }
 
