@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { log } from "../logger";
+import { logInfoForRequest } from "../logger";
 import type { LogBody } from "./types";
 
 export const logRequest = (req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +14,6 @@ export const logRequest = (req: Request, res: Response, next: NextFunction) => {
       status: 0,
       duration: 0,
     },
-    id: res?.locals?.id,
   };
 
   res.on("finish", () => {
@@ -23,7 +22,7 @@ export const logRequest = (req: Request, res: Response, next: NextFunction) => {
     );
     logBody.response.status = res.statusCode;
 
-    log.info(logBody);
+    logInfoForRequest(res, logBody);
   });
 
   next();
