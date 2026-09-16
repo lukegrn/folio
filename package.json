@@ -1,5 +1,5 @@
 {
-  "name": "folio-ts",
+  "name": "folio",
   "module": "index.ts",
   "type": "module",
   "private": true,
