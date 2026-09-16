@@ -7,10 +7,10 @@ export const log = new Logger({
   type: "json",
 });
 
-export const logInfoForRequest = (res: Response, body: Object) => {
+export const logInfoForRequest = (res: Response, body: object) => {
   log.info({ id: res?.locals?.id, ...body });
 };
 
-export const logErrorForRequest = (res: Response, body: Object) => {
+export const logErrorForRequest = (res: Response, body: object) => {
   log.error({ id: res?.locals?.id, ...body });
 };
