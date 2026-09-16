@@ -12,10 +12,6 @@ export const main = () => {
   app.use(injectRequestID);
   app.use(logRequest);
 
-  app.get("/", (_req: Request, res: Response) => {
-    res.send("Hello, world!");
-  });
-
   app.get("/json", (_req: Request, res: Response) => {
     res.send({ msg: "Hello, world!" });
   });
@@ -32,6 +28,15 @@ export const main = () => {
 
   app.get("/err", (_req: Request, _res: Response) => {
     throw new Error();
+  });
+
+  // Explicit frontend routes
+  app.get("/", (_req: Request, res: Response) => {
+    res.sendFile(`${__dirname}/views/home.html`);
+  });
+
+  app.get("/js/htmx.min.js", (_req: Request, res: Response) => {
+    res.sendFile(`${__dirname}/views/htmx.min.js`);
   });
 
   // Error handler must be last
