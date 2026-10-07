@@ -4,7 +4,7 @@ import type { Response } from "express";
 
 export const log = new Logger({
   minLevel: getConfig().log.minLevel,
-  type: "json",
+  type: process.env.NODE_ENV === "test" ? "hidden" : "json",
 });
 
 export const logInfoForRequest = (res: Response, body: object) => {

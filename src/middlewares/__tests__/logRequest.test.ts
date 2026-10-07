@@ -1,20 +1,13 @@
 import type { Request, Response } from "express";
-import { beforeEach, expect, mock, test } from "bun:test";
+import { beforeEach, expect, mock, spyOn, test } from "bun:test";
 import { EventEmitter } from "node:events";
 import { logRequest } from "../logRequest";
-import type { LogBody } from "../types";
+import { log } from "../../logger";
 
-const logInfo = mock((obj: LogBody) => obj);
 const nextFn = mock();
 
-mock.module("../../logger", () => ({
-  log: {
-    info: logInfo,
-  },
-}));
-
 beforeEach(() => {
-  logInfo.mockClear();
+  mock.restore();
   nextFn.mockClear();
 });
 
@@ -30,6 +23,7 @@ const mockInputs = () => ({
 });
 
 test("logs based on request and response", () => {
+  const logInfo = spyOn(log, "info");
   const { req, res, next } = mockInputs();
 
   logRequest(req, res, next);

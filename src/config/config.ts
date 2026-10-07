@@ -16,10 +16,18 @@ interface ApplicationConfig {
   port: number;
 }
 
+interface EmailConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+}
+
 interface Config {
   database: DatabaseConfig;
   log: LogConfig;
   application: ApplicationConfig;
+  email: EmailConfig;
 }
 
 let config: Config | undefined;
@@ -69,6 +77,12 @@ export const registerConfig = () => {
     },
     application: {
       port: num(req("APPLICATION_PORT")),
+    },
+    email: {
+      host: req("EMAIL_HOST"),
+      port: num(req("EMAIL_PORT")),
+      user: req("EMAIL_USER"),
+      pass: req("EMAIL_PASS"),
     },
   };
 };

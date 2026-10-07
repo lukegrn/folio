@@ -1,17 +1,11 @@
-import { beforeEach, expect, mock, test } from "bun:test";
+import { beforeEach, expect, mock, test, spyOn } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 import { errorHandler } from "../errorHandler";
+import { log } from "../../logger";
 
-const logError = mock();
 const json = mock();
 const status = mock((_status: number) => ({
   json,
-}));
-
-mock.module("../../logger", () => ({
-  log: {
-    error: logError,
-  },
 }));
 
 const mockInputs = () => ({
@@ -28,16 +22,17 @@ const mockInputs = () => ({
 });
 
 beforeEach(() => {
-  logError.mockClear();
+  mock.restore();
   json.mockClear();
   status.mockClear();
 });
 
 test("logs an error", () => {
+  const logError = spyOn(log, "error");
   const { err, req, res, nextFn } = mockInputs();
   errorHandler(err, req, res, nextFn);
 
-  expect(logError.mock.calls.length).toBe(1);
+  expect(logError).toBeCalledTimes(1);
   expect(logError.mock.calls?.[0]?.[0].message).toBe("test message");
 });
 
@@ -45,11 +40,12 @@ test("responds with 500", () => {
   const { err, req, res, nextFn } = mockInputs();
   errorHandler(err, req, res, nextFn);
 
-  expect(status.mock.calls.length).toBe(1);
-  expect(status.mock.calls?.[0]?.[0]).toBe(500);
+  expect(status).toBeCalledTimes(1);
+  expect(status).toBeCalledWith(500);
 });
 
 test("logs the request id when set", () => {
+  const logError = spyOn(log, "error");
   const { err, req, res, nextFn } = mockInputs();
 
   res.locals.id = "id";
