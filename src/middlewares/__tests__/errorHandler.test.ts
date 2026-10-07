@@ -8,6 +8,12 @@ const status = mock((_status: number) => ({
   json,
 }));
 
+mock.module("../../logger", () => ({
+  log: {
+    error: logError,
+  },
+}));
+
 const mockInputs = () => ({
   req: {
     path: "/",
@@ -22,12 +28,6 @@ const mockInputs = () => ({
 });
 
 beforeEach(() => {
-  mock.module("../../logger", () => ({
-    log: {
-      error: logError,
-    },
-  }));
-
   logError.mockClear();
   json.mockClear();
   status.mockClear();
