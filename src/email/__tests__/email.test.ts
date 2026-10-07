@@ -1,12 +1,11 @@
-import { test, mock, beforeEach, expect } from "bun:test";
+import { test, mock, beforeEach, expect, spyOn } from "bun:test";
 import { init, send } from "../email";
 import { getConfig } from "../../config/config";
 import type { Response } from "express";
+import * as logger from "../../logger";
 
 const mockVerify = mock();
 const mockSendMail = mock();
-const mockLogInfoForRequest = mock();
-const mockLogErrorForRequest = mock();
 
 const transport = {
   verify: mockVerify,
@@ -14,13 +13,6 @@ const transport = {
 };
 
 const mockCreateTransport = mock(() => transport);
-
-mock.module("../../logger", () => {
-  return {
-    logInfoForRequest: mockLogInfoForRequest,
-    logErrorForRequest: mockLogErrorForRequest,
-  };
-});
 
 beforeEach(() => {
   mock.module("nodemailer", () => {
@@ -32,11 +24,11 @@ beforeEach(() => {
     };
   });
 
+  mock.restore();
+
   mockVerify.mockClear();
   mockCreateTransport.mockClear();
   mockSendMail.mockClear();
-  mockLogInfoForRequest.mockClear();
-  mockLogErrorForRequest.mockClear();
 });
 
 test("initializes with config value", async () => {
@@ -63,6 +55,7 @@ test("verifies the transport", async () => {
 });
 
 test("sends a message and reports success", async () => {
+  const mockLogInfoForRequest = spyOn(logger, "logInfoForRequest");
   await init();
 
   const payload = {
@@ -89,6 +82,9 @@ test("sends a message and reports success", async () => {
 });
 
 test("on error reports error", async () => {
+  const mockLogErrorForRequest = spyOn(logger, "logErrorForRequest");
+
+  // force error
   mock.module("nodemailer", () => {
     return {
       default: {
