@@ -5,9 +5,12 @@ import { log } from "./logger";
 import { errorHandler } from "./middlewares/errorHandler";
 import { injectRequestID } from "./middlewares/injectRequestID";
 import { getConfig } from "./config/config";
+import { init as initEmail, send as sendEmail } from "./email/email";
 
-export const main = () => {
+export const main = async () => {
   const app = express();
+
+  await initEmail();
 
   app.use(injectRequestID);
   app.use(logRequest);
@@ -28,6 +31,22 @@ export const main = () => {
 
   app.get("/err", (_req: Request, _res: Response) => {
     throw new Error();
+  });
+
+  app.get("/email/:to", async (req: Request, res: Response) => {
+    const success = await sendEmail({
+      from: "test@test.com",
+      to: String(req.params.to), // placeholder, obv this is bad but is just for testing
+      subject: "test",
+      message: "test",
+      res,
+    });
+
+    if (success) {
+      res.send({ msg: "Success" });
+    } else {
+      res.status(500).send({ msg: "Whoops" });
+    }
   });
 
   // Explicit frontend routes
