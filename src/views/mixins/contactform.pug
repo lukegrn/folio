@@ -1,0 +1,39 @@
+mixin contactform
+  #status
+  form#contactform
+    label(for="firstname") First Name:
+    input#firstname(name="firstname", type="text", required)
+    label(for="lastname") Last Name:
+    input#lastname(name="lastname", type="text", required)
+    br
+    label(for="email") Email:
+    input#email(name="email", type="email", required)
+    br
+    label(for="message") Message:
+    textarea#message(name="message", rows="5", required)
+    button(type="submit") Submit
+  script.
+    const form = document.getElementById("contactform");
+    const status = document.getElementById("status");
+
+    console.log("submitting");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        status.innerHTML = "Success!";
+        form.reset();
+      } else {
+        status.innerHTML = "Whoops! Something went wrong. Try again later.";
+      }
+    });

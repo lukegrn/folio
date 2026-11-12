@@ -10,6 +10,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
+    "@prettier/plugin-pug": "^3.6.0",
+    "@types/body-parser": "^1.19.6",
     "@types/bun": "latest",
     "@types/express": "^5.0.6"
   },
@@ -17,9 +19,11 @@
     "typescript": "^7"
   },
   "dependencies": {
+    "body-parser": "^2.3.0",
     "express": "^5.2.1",
     "nodemailer": "^10.0.11",
     "postgres": "^3.4.9",
+    "pug": "^3.0.4",
     "tslog": "^5.2.0"
   }
 }

@@ -1,0 +1,10 @@
+extends layout.pug
+include mixins/contactform.pug
+
+block content
+  .message
+    if success
+      p.success Sent!
+    else if success != undefined
+      p.error Whoops! Something went wrong, please try again later.
+    +contactform
