@@ -24,15 +24,23 @@ export const registerRoutes = (app: Express) => {
 
   // Frontend routes
   app.get("/", (_req: Request, res: Response) => {
-    res.render("home");
+    res.render("pages/home");
   });
 
   app.get("/contact", (_req: Request, res: Response) => {
-    res.render("contact");
+    res.render("pages/contact");
   });
 
-  app.get("/js/htmx.min.js", (_req: Request, res: Response) => {
-    res.sendFile(`${__dirname}/views/htmx.min.js`);
+  app.get("/posts", (_req: Request, res: Response) => {
+    res.render("pages/posts");
+  });
+
+  app.get("/photography", (_req: Request, res: Response) => {
+    res.render("pages/photography");
+  });
+
+  app.get("/toolbox", (_req: Request, res: Response) => {
+    res.render("pages/toolbox");
   });
 
   // Register after middleware must be at end

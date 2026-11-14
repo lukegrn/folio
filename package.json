@@ -7,7 +7,8 @@
     "start": "bun run index.ts",
     "lint": "biome lint",
     "lint:fix": "biome lint --write",
-    "t": "bun test --parallel"
+    "t": "bun test --parallel",
+    "dev": "NODE_ENV=development bun start"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
