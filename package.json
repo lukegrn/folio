@@ -6,7 +6,8 @@
   "scripts": {
     "start": "bun run index.ts",
     "lint": "biome lint",
-    "lint:fix": "biome lint --write"
+    "lint:fix": "biome lint --write",
+    "t": "bun test --parallel"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",

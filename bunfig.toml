@@ -6,3 +6,4 @@ coverageThreshold = 0.8
 coveragePathIgnorePatterns = [
 	"appconf.ts",
 ]
+parallel = true
