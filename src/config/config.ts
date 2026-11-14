@@ -21,6 +21,7 @@ interface EmailConfig {
   port: number;
   user: string;
   pass: string;
+  recipient: string;
 }
 
 interface Config {
@@ -83,6 +84,7 @@ export const registerConfig = () => {
       port: num(req("EMAIL_PORT")),
       user: req("EMAIL_USER"),
       pass: req("EMAIL_PASS"),
+      recipient: req("EMAIL_RECIPIENT"),
     },
   };
 };
