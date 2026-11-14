@@ -79,8 +79,8 @@ test("should return 400 when all required fields are missing", async () => {
 
 test("should return 400 listing only the specific missing fields", async () => {
   mockReq.body = {
-    firstname: "Jane",
-    email: "jane.doe@example.com",
+    firstname: "User",
+    email: "user@example.com",
   };
 
   await handleContact(mockReq, mockRes);
