@@ -1,4 +1,4 @@
-import { test, mock, beforeEach, expect, spyOn, vi } from "bun:test";
+import { test, mock, beforeEach, expect, spyOn } from "bun:test";
 import { init, send } from "../email";
 import { getConfig } from "../../config/config";
 import type { Response } from "express";
