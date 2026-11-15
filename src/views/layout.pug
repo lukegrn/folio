@@ -5,7 +5,52 @@ html(lang="en")
   head
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width,initial-scale=1")
+    link(rel="preconnect", href="https://fonts.googleapis.com")
+    link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
+    link(
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap",
+      rel="stylesheet"
+    )
     title Folio
+    style.
+      :root {
+        --primary-bg-color: #f7e7ce;
+        --accent-bg-color: #f2cc8f;
+        --primary-fg-color: #6b3e2e;
+        --accent-fg-color: #c65d3b;
+      }
+      body {
+        margin: 0;
+        padding: 2rem;
+        font-family: "Fira Sans", sans-serif;
+        font-weight: 200;
+        background-color: var(--primary-bg-color);
+        color: var(--primary-fg-color);
+      }
+      .sidebar {
+        width: calc(100vw / 6);
+      }
+      @media screen and (max-width: 800px) {
+        body {
+          font-size: 0.7rem;
+          padding: 0.3rem;
+        }
+        .sidebar {
+          width: calc(100vw / 4);
+        }
+      }
+      .flex-lr {
+        display: flex;
+      }
+      .sidebar {
+        height: 100vh;
+      }
+      .main {
+        flex-grow: 1;
+      }
   body
-    +navlinks
-    block content
+    .flex-lr.other
+      .sidebar
+        +navlinks
+      .main
+        block content
