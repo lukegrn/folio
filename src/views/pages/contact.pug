@@ -1,6 +1,9 @@
 extends ../layout.pug
 include ../mixins/contactform.pug
 
+block vars
+  - const activePage = "contact";
+
 block content
   .message
     if success

@@ -1,5 +1,8 @@
 include mixins/navlinks.pug
 
+block vars
+  - const activePage = "";
+
 doctype html
 html(lang="en")
   head
@@ -49,6 +52,6 @@ html(lang="en")
   body
     .flex-lr
       .sidebar
-        +navlinks
+        +navlinks(activePage)
       .main
         block content
