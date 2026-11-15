@@ -1,4 +1,4 @@
-mixin navlinks
+mixin navlinks(page)
   style.
     .navlinks {
       height: 100%;
@@ -22,9 +22,14 @@ mixin navlinks
       color: var(--primary-fg-color);
     }
 
+    .navlinks > .link.active {
+      color: var(--accent-fg-color);
+      background-color: var(--accent-bg-color);
+    }
+
   .navlinks
-    a.link(href="/") Home
-    a.link(href="/contact") Contact Me
-    a.link(href="/photography") Photography
-    a.link(href="/posts") Posts
-    a.link(href="/toolbox") Toolbox
+    a.link(href="/", class=page == "home" ? "active" : "inactive") Home
+    a.link(href="/contact", class=page == "contact" ? "active" : "inactive") Contact Me
+    a.link(href="/photography", class=page == "photography" ? "active" : "inactive") Photography
+    a.link(href="/posts", class=page == "posts" ? "active" : "inactive") Posts
+    a.link(href="/toolbox", class=page == "toolbox" ? "active" : "inactive") Toolbox
