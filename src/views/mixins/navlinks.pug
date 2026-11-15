@@ -1,12 +1,30 @@
 mixin navlinks
+  style.
+    .navlinks {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navlinks > .link:hover {
+      background-color: var(--accent-bg-color);
+      font-weight: 500;
+    }
+
+    .navlinks > .link {
+      color: var(--primary-fg-color);
+      text-decoration: none;
+      margin-right: 2rem;
+      padding-left: 0.3rem;
+    }
+
+    .navlinks > .link:visited {
+      color: var(--primary-fg-color);
+    }
+
   .navlinks
-    li
-      a(href="/") Home
-    li
-      a(href="/contact") Contact Me
-    li
-      a(href="/photography") Photography
-    li
-      a(href="/posts") Posts
-    li
-      a(href="/toolbox") Toolbox
+    a.link(href="/") Home
+    a.link(href="/contact") Contact Me
+    a.link(href="/photography") Photography
+    a.link(href="/posts") Posts
+    a.link(href="/toolbox") Toolbox
