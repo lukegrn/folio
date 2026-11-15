@@ -28,7 +28,8 @@ html(lang="en")
         color: var(--primary-fg-color);
       }
       .sidebar {
-        width: calc(100vw / 6);
+        flex: 0 0 calc(100vw / 6);
+        height: 100vh;
       }
       @media screen and (max-width: 800px) {
         body {
@@ -36,20 +37,17 @@ html(lang="en")
           padding: 0.3rem;
         }
         .sidebar {
-          width: calc(100vw / 4);
+          flex: 0 0 calc(100vw / 4);
         }
       }
       .flex-lr {
         display: flex;
       }
-      .sidebar {
-        height: 100vh;
-      }
       .main {
-        flex-grow: 1;
+        flex: 1;
       }
   body
-    .flex-lr.other
+    .flex-lr
       .sidebar
         +navlinks
       .main
