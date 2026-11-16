@@ -1,6 +1,7 @@
 # Folio
 
-A small web application to serve a photography portfolio - namely mine.
+A small home on the web for myself. Originally this was created to be my
+photography portfolio, but it will likely be more than that.
 
 To install dependencies:
 
