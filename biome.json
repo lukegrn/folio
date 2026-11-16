@@ -1,5 +1,5 @@
 {
   "files": {
-    "includes": ["**", "!!**/src/views/htmx.min.js"]
+    "includes": ["**", "!!**/src/assets/*"]
   }
 }
