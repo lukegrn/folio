@@ -1,0 +1,122 @@
+mixin tooltip(size, imgpath = "/assets/info.svg")
+  - const id = "id" + Math.random().toString().substr(2, 10);
+
+  style.
+    .tooltip##{id} > img {
+      width: #{size != undefined ? size : '1rem'};
+    }
+    .tooltip > .tooltip {
+      visibility: hidden;
+      position: absolute;
+      max-width: 40%;
+      padding: 0.3rem;
+      border: 1px solid;
+      border-radius: 5px;
+      top: 0;
+      left: 0;
+      background-color: var(--primary-bg-color);
+      z-index: 100;
+    }
+
+  .tooltip(id=id)
+    img(src=imgpath)
+    if block
+      span.tooltip
+        block
+
+  if block
+    script.
+      (() => {
+        const id = "#{id}";
+        const hoverTarget = document.querySelector(`#${id} > img`);
+        const tooltip = document.querySelector(`#${id} > .tooltip`);
+
+        hoverTarget.addEventListener("mouseenter", () => {
+          // place it somewhere, smartly
+          const hoverRect = hoverTarget.getBoundingClientRect();
+          const tooltipRect = tooltip.getBoundingClientRect();
+
+          const xSection = hoverRect.x / window.innerWidth;
+          const ySection = hoverRect.y / window.innerHeight;
+
+          let xDirection; // left, center, or right
+          let yAlign; // bottom, center, below, above, or top
+
+          // Screen is divided like this
+          // |left top aligned|center below|right top aligned|
+          // |left center aligned|center above|right center aligned |
+          // |left bottom aligned|center above|right bottom aligned |
+          if (xSection < 0.34) {
+            xDirection = "left";
+            if (ySection < 0.34) {
+              yAlign = "top";
+            } else if (ySection < 0.67) {
+              yAlign = "center";
+            } else {
+              yAlign = "bottom";
+            }
+          } else if (xSection < 0.67) {
+            xDirection = "center";
+            if (ySection < 0.34) {
+              yAlign = "below";
+            } else {
+              yAlign = "above";
+            }
+          } else {
+            xDirection = "right";
+            if (ySection < 0.34) {
+              yAlign = "top";
+            } else if (ySection < 0.67) {
+              yAlign = "center";
+            } else {
+              yAlign = "bottom";
+            }
+          }
+
+          const tooltipPosition = { x: 0, y: 0 };
+
+          // Calculate where the tooltip should spawn
+
+          switch (xDirection) {
+            case "left":
+              tooltipPosition.x = hoverRect.x + hoverRect.width;
+              break;
+            case "center":
+              tooltipPosition.x = hoverRect.x - tooltipRect.width / 2;
+              break;
+            case "right":
+              tooltipPosition.x = hoverRect.x - tooltipRect.width;
+              break;
+          }
+
+          switch (yAlign) {
+            case "top":
+              tooltipPosition.y = hoverRect.y;
+              break;
+            case "center":
+              tooltipPosition.y = hoverRect.y - tooltipRect.height / 2;
+              break;
+            case "bottom":
+              tooltipPosition.y =
+                hoverRect.y + hoverRect.height - tooltipRect.height;
+              break;
+            case "below":
+              tooltipPosition.y = hoverRect.y + hoverRect.height;
+              break;
+            case "above":
+              tooltipPosition.y = hoverRect.y - tooltipRect.height;
+              break;
+          }
+
+          tooltipPosition.x = Math.floor(tooltipPosition.x);
+          tooltipPosition.y = Math.floor(tooltipPosition.y);
+
+          tooltip.style.left = `${tooltipPosition.x}px`;
+          tooltip.style.top = `${tooltipPosition.y}px`;
+          tooltip.style.visibility = "visible";
+        });
+
+        hoverTarget.addEventListener("mouseout", () => {
+          tooltip.style.visibility = "hidden";
+        });
+      })();
