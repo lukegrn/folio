@@ -1,9 +1,10 @@
-import { type Express, type Request, type Response } from "express";
+import express, { type Express, type Request, type Response } from "express";
 import { injectRequestID } from "./middlewares/injectRequestID";
 import { logRequest } from "./middlewares/logRequest";
 import { errorHandler } from "./middlewares/errorHandler";
 import { handleContact } from "./handlers/contact";
 import bodyParser from "body-parser";
+import path from "node:path";
 
 const registerBeforeMiddleware = (app: Express) => {
   app.use(bodyParser.urlencoded());
@@ -21,6 +22,9 @@ export const registerRoutes = (app: Express) => {
   registerBeforeMiddleware(app);
 
   app.post("/api/contact", handleContact);
+
+  // Statis assets
+  app.use("/assets", express.static(path.join(__dirname, "assets")));
 
   // Frontend routes
   app.get("/", (_req: Request, res: Response) => {

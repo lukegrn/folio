@@ -1,0 +1,6 @@
+include ./tooltip.pug
+
+mixin ainote(size)
+  +tooltip(size, "/assets/ainote.png")
+    if block
+      block
