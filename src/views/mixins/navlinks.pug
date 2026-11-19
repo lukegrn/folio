@@ -2,34 +2,36 @@ include ./ainote.pug
 
 mixin navlinks(page)
   style.
-    .navlinks {
-      display: flex;
-      height: 100%;
-      flex-direction: column;
-    }
+    @scope {
+      .navlinks {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+      }
 
-    .navlinks > .link:hover {
-      background-color: var(--accent-bg-color);
-      font-weight: 500;
-    }
+      .navlinks > .link:hover {
+        background-color: var(--accent-bg-color);
+        font-weight: 500;
+      }
 
-    .navlinks > .link {
-      color: var(--primary-fg-color);
-      text-decoration: none;
-      margin-right: 2rem;
-      padding-left: 0.3rem;
-    }
+      .navlinks > .link {
+        color: var(--primary-fg-color);
+        text-decoration: none;
+        margin-right: 2rem;
+        padding-left: 0.3rem;
+      }
 
-    .navlinks > .link:visited {
-      color: var(--primary-fg-color);
-    }
+      .navlinks > .link:visited {
+        color: var(--primary-fg-color);
+      }
 
-    .navlinks > .link.active {
-      color: var(--accent-fg-color);
-      background-color: var(--accent-bg-color);
-    }
-    .navlinks > .end {
-      margin-top: auto;
+      .navlinks > .link.active {
+        color: var(--accent-fg-color);
+        background-color: var(--accent-bg-color);
+      }
+      .navlinks > .end {
+        margin-top: auto;
+      }
     }
 
   .navlinks

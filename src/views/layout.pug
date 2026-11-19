@@ -1,4 +1,5 @@
 include mixins/navlinks.pug
+include mixins/notifications.pug
 
 block vars
   - const activePage = "";
@@ -21,6 +22,53 @@ html(lang="en")
         --accent-bg-color: #f2cc8f;
         --primary-fg-color: #6b3e2e;
         --accent-fg-color: #c65d3b;
+        --success-color: #96d294;
+        --failure-color: #bf4747;
+      }
+      h1 {
+        font-weight: 400;
+      }
+      button {
+        padding: 1rem;
+        background-color: var(--accent-bg-color);
+        border: none;
+        color: var(--primary-fg-color);
+        font-weight: 200;
+        font-size: 1rem;
+      }
+      button:hover {
+        font-weight: 500;
+        cursor: pointer;
+      }
+      input {
+        border: none;
+        border-bottom: 0.05rem solid var(--primary-fg-color);
+        background-color: var(--primary-bg-color);
+        font-family: "fira sans", sans-serif;
+        color: var(--primary-fg-color);
+        font-size: 1rem;
+      }
+      input:hover {
+        border-bottom: 0.1rem solid var(--primary-fg-color);
+      }
+      input:focus {
+        outline: none;
+        border-bottom: 0.1rem solid var(--primary-fg-color);
+      }
+      textarea {
+        border: none;
+        border-bottom: 0.05rem solid var(--primary-fg-color);
+        background-color: var(--primary-bg-color);
+        font-family: "fira sans", sans-serif;
+        color: var(--primary-fg-color);
+        font-size: 1rem;
+      }
+      textarea:hover {
+        border-bottom: 0.1rem solid var(--primary-fg-color);
+      }
+      textarea:focus {
+        outline: none;
+        border-bottom: 0.1rem solid var(--primary-fg-color);
       }
       body {
         margin: 0;
@@ -50,6 +98,7 @@ html(lang="en")
         flex: 1;
       }
   body
+    +notifications
     .flex-lr
       .sidebar
         +navlinks(activePage)

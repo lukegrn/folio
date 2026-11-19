@@ -1,17 +1,105 @@
 mixin contactform
-  #status
-  form#contactform
-    label(for="firstname") First Name:
-    input#firstname(name="firstname", type="text", required)
-    label(for="lastname") Last Name:
-    input#lastname(name="lastname", type="text", required)
-    br
-    label(for="email") Email:
-    input#email(name="email", type="email", required)
-    br
-    label(for="message") Message:
-    textarea#message(name="message", rows="5", required)
-    button(type="submit") Submit
+  style.
+    @scope {
+      .form {
+        width: 100%;
+      }
+
+      .group {
+        width: 60%;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .loader {
+        width: 1rem;
+        height: 1rem;
+        background-color: var(--accent-fg-color);
+        margin-left: 1rem;
+        margin-right: 1rem;
+        border-radius: 5px;
+        animation: loaderPulse 2s infinite;
+      }
+
+      .hidden {
+        visibility: hidden;
+      }
+
+      @keyframes loaderPulse {
+        0% {
+          width: 1rem;
+          height: 1rem;
+        }
+        25% {
+          height: 1rem;
+          width: 0.1rem;
+        }
+        50% {
+          width: 0.1rem;
+          height: 1rem;
+        }
+        75% {
+          width: 1rem;
+          height: 0.1rem;
+        }
+        100% {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+
+      button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .group > h1 {
+        margin-bottom: 0;
+      }
+
+      .item {
+        flex-grow: 1;
+        padding: 0.5rem;
+      }
+
+      .item > * {
+        width: 100%;
+      }
+    }
+
+  .form
+    .group
+      h1 Contact Me
+    .group
+      p Send me a message!
+    #status
+    form#contactform
+      .group
+        .item
+          label(for="firstname") First Name*
+          br
+          input#firstname(name="firstname", type="text", required)
+        .item
+          label(for="lastname") Last Name*
+          br
+          input#lastname(name="lastname", type="text", required)
+      .group
+        .item
+          label(for="email") Email*
+          br
+          input#email(name="email", type="email", required)
+      .group
+        .item
+          label(for="message") Message*
+          br
+          textarea#message(name="message", rows="5", required)
+      .group
+        .item
+          button(type="submit")
+            .loader.hidden
+            .content Send
+            .loader.hidden
   script.
     const form = document.getElementById("contactform");
     const status = document.getElementById("status");
@@ -22,6 +110,17 @@ mixin contactform
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
+      const loaders = document.querySelectorAll("#contactform .loader");
+      const buttonContent = document.querySelector(
+        "#contactform button .content",
+      );
+
+      loaders.forEach((loader) => {
+        loader.classList.remove("hidden");
+      });
+
+      buttonContent.innerHTML = "Sending";
+
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -29,9 +128,15 @@ mixin contactform
       });
 
       if (response.ok) {
-        status.innerHTML = "Success!";
+        window.notify(true, "Email sent!");
         form.reset();
       } else {
-        status.innerHTML = "Whoops! Something went wrong. Try again later.";
+        window.notify(false, "Whoops! Something went wrong. Try again later.");
       }
+
+      loaders.forEach((loader) => {
+        loader.classList.add("hidden");
+      });
+
+      buttonContent.innerHTML = "Send";
     });
