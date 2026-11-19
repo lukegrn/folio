@@ -1,0 +1,76 @@
+mixin notifications
+  div
+    style.
+      @scope {
+        #notifications {
+          position: absolute;
+          right: 4rem;
+          top: 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+        }
+        .notification {
+          border: 1px solid var(--primary-fg-color);
+          border-radius: 5px;
+          padding: 0.3rem;
+          display: flex;
+          margin-bottom: 1rem;
+          padding-right: 1rem;
+          overflow: hidden;
+          white-space: nowrap;
+          background-color: var(--primary-bg-color);
+          z-index: 100;
+          max-width: 50vw;
+        }
+        .hidden {
+          display: none;
+        }
+        img {
+          width: 1rem;
+          margin-right: 1rem;
+        }
+      }
+
+    #notifications
+      .notification.hidden
+        img
+        span
+
+    script.
+      window.notify = (success, text) => {
+        const appearAnimation = [{ opacity: "0%" }, { opacity: "100%" }];
+        const disappearAnimation = [
+          { opacity: "100%" },
+          { opacity: "0%", display: "none" },
+        ];
+        const animationDuration = 500;
+        const notificationLifetime = 5000;
+
+        const notificationHolder = document.querySelector("#notifications");
+        const toClone = document.querySelector("#notifications .notification");
+
+        const newNotification = toClone.cloneNode(true);
+        newNotification.classList.remove("hidden");
+        console.log(newNotification.firstChild);
+        newNotification.children[0].src = success
+          ? "/assets/success.svg"
+          : "/assets/error.svg";
+        newNotification.children[1].innerHTML = text;
+
+        notificationHolder.appendChild(newNotification);
+        newNotification.animate(appearAnimation, {
+          duration: animationDuration,
+        });
+
+        setTimeout(() => {
+          const disappear = newNotification.animate(disappearAnimation, {
+            duration: animationDuration,
+            fill: "forwards",
+          });
+
+          disappear.onfinish = () => {
+            notificationHolder.removeChild(newNotification);
+          };
+        }, notificationLifetime);
+      };
