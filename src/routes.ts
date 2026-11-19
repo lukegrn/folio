@@ -23,8 +23,13 @@ export const registerRoutes = (app: Express) => {
 
   app.post("/api/contact", handleContact);
 
-  // Statis assets
+  // Static assets
   app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+  // Robots
+  app.get("/robots.txt", (_req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "assets", "robots.txt"));
+  });
 
   // Frontend routes
   app.get("/", (_req: Request, res: Response) => {
